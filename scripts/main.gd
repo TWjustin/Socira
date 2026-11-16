@@ -11,7 +11,7 @@ var status: Label
 var load_failed := false
 var pickup_templates: Dictionary = {}
 const GATE_SCENE = preload("res://scenes/travel_gate.tscn")
-const LAND_SCENE = preload("res://scenes/land.tscn")
+const ISLAND_TERRAIN_SCENE = preload("res://scenes/island_terrain.tscn")
 const ORE_SCENE = preload("res://scenes/items/test_ore.tscn")
 const RETURN_POSITION := Vector3(8, 0, -3)
 var on_island := false
@@ -204,7 +204,7 @@ func travel() -> void:
 		island = Node3D.new()
 		island.name = "TestIsland"
 		add_child(island)
-		island.add_child(LAND_SCENE.instantiate())
+		island.add_child(ISLAND_TERRAIN_SCENE.instantiate())
 		var gate = GATE_SCENE.instantiate()
 		gate.position = Vector3(8, 0.9, -5)
 		gate.destination_label = "返回自家土地"
@@ -219,8 +219,9 @@ func travel() -> void:
 		ore.position = Vector3(3, 0.8, -8)
 		island.add_child(ore)
 		on_island = true
+		player.floor_snap_length = 0.6
 		_arrive()
-		status.text = "測試外島 · 64×64 m · 測試材料 120 個 · 外島不自動存檔"
+		status.text = "海岸試作 · 淺水可走，深水阻擋 · 外島不自動存檔"
 
 func _arrive() -> void:
 	player.position = RETURN_POSITION
@@ -236,6 +237,7 @@ func _return_home() -> void:
 	for node in home_nodes:
 		add_child(node)
 	on_island = false
+	player.floor_snap_length = 0.1
 	_arrive()
 	status.text = "已返回自家土地，外島旅程結束"
 

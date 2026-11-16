@@ -2,6 +2,13 @@
 
 ## 最新補充（2026-11-16）
 
+- 背包與工具欄格子改為 64×64，背包 Esc 在 InventoryPanel._input 處理並標記已處理，避免同次事件傳到角色又釋放游標。背包已關閉時維持角色既有 Esc 行為。
+- AutoSaveTimer 沿用 60 秒週期，timeout 改連 _autosave，僅在 not on_island 時呼叫 save_game；save_game 本身與正常關閉流程不變。返回後由後續計時器週期恢復儲存，不額外增加轉場即時存檔。
+
+- 世界 Label3D 字級：Pickup、ItemDrop、測試方塊與出入口由 32 調至 48，礦石由 40 調至 60，pixel_size 維持 0.004。背包格由 78×60 縮為 64×52、工具欄由 78×72 縮為 64×60；同步縮短工具欄底部預留與合成面板最小寬度。格內名稱僅省略開發用後綴，避免文字撐高格子。
+
+- 視窗縮放修正：project.godot 設定 960×540 邏輯基準、預設視窗 1152×648、canvas_items 縮放及 expand 比例策略。UI 隨視窗放大，不同比例擴展可見區域；3D 使用實際視窗解析度繪製，準星射線仍依邏輯 viewport 中央計算。
+
 - 已於本輪初始化本機 Git 儲存庫，主分支為 main；.godot 快取與其中測試截圖依既有 .gitignore 排除，腳本 .uid 與資源 .import 設定保留追蹤。尚未設定遠端或上傳；下方「不是 Git 儲存庫」為初始化前觀察。
 
 - 新增 test_ore 場景／腳本及 test_pickaxe、test_stone 資源；interaction.gd 依選取工具和目標分流，五擊後產生共七個獨立 Pickup，最後一擊有短暫碎片噴散；碎片僅視覺，不是額外石塊。

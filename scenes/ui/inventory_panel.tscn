@@ -29,7 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-offset_bottom = -80.0
+offset_bottom = -78.0
 
 [node name="Panel" type="PanelContainer" parent="Overlay/Center"]
 layout_mode = 2
@@ -75,7 +75,7 @@ columns = 9
 
 [node name="Crafting" type="VBoxContainer" parent="Overlay/Center/Panel/Margin/Content"]
 visible = false
-custom_minimum_size = Vector2(750, 190)
+custom_minimum_size = Vector2(624, 190)
 layout_mode = 2
 theme_override_constants/separation = 16
 
@@ -95,4 +95,4 @@ layout_mode = 2
 
 [node name="Hint" type="Label" parent="Overlay/Center/Panel/Margin/Content"]
 layout_mode = 2
-text = "E 關閉背包"
+text = "E／Esc 關閉背包"

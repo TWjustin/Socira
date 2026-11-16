@@ -42,8 +42,9 @@ func _ready() -> void:
 	add_child(gate)
 	home_nodes = [$Land, $TestPickups, $UseTestTarget, gate, dev_supplies]
 	var timer := Timer.new()
+	timer.name = "AutoSaveTimer"
 	timer.wait_time = 60.0
-	timer.timeout.connect(save_game)
+	timer.timeout.connect(_autosave)
 	add_child(timer)
 	timer.start()
 
@@ -82,6 +83,10 @@ func _build_interface() -> void:
 	status.position = Vector2(20, 128)
 	status.text = "每 60 秒自動儲存，關閉視窗時儲存"
 	layer.add_child(status)
+
+func _autosave() -> void:
+	if not on_island:
+		save_game()
 
 func save_game() -> Error:
 	if load_failed:
@@ -215,7 +220,7 @@ func travel() -> void:
 		island.add_child(ore)
 		on_island = true
 		_arrive()
-		status.text = "測試外島 · 64×64 m · 測試材料 120 個"
+		status.text = "測試外島 · 64×64 m · 測試材料 120 個 · 外島不自動存檔"
 
 func _arrive() -> void:
 	player.position = RETURN_POSITION

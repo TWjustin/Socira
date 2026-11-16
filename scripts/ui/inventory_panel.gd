@@ -29,14 +29,14 @@ func _ready() -> void:
 	craft_button.pressed.connect(_craft_one)
 	for index in range(Inventory.CAPACITY):
 		var panel := PanelContainer.new()
-		panel.custom_minimum_size = Vector2(78, 60)
+		panel.custom_minimum_size = Vector2(64, 64)
 		var style := StyleBoxFlat.new()
 		style.bg_color = Color("23313d")
 		style.content_margin_left = 4
 		style.content_margin_right = 4
 		panel.add_theme_stylebox_override("panel", style)
 		var label := Label.new()
-		label.custom_minimum_size = Vector2(70, 52)
+		label.custom_minimum_size = Vector2(56, 56)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.add_theme_font_size_override("font_size", 12)
@@ -53,7 +53,7 @@ func _ready() -> void:
 	anchor.anchor_top = 1.0
 	anchor.anchor_bottom = 1.0
 	anchor.anchor_right = 1.0
-	anchor.offset_top = -86
+	anchor.offset_top = -78
 	anchor.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(anchor)
 	hotbar_row = HBoxContainer.new()
@@ -61,7 +61,7 @@ func _ready() -> void:
 	anchor.add_child(hotbar_row)
 	for index in range(9):
 		var button := Button.new()
-		button.custom_minimum_size = Vector2(78, 72)
+		button.custom_minimum_size = Vector2(64, 64)
 		button.focus_mode = Control.FOCUS_NONE
 		button.pressed.connect(_click_slot.bind(true, index))
 		var label := Label.new()
@@ -109,13 +109,13 @@ func refresh() -> void:
 		else:
 			occupied += 1
 			var id: StringName = slot["item_id"]
-			slot_labels[index].text = "%s\n× %d" % [item_names.get(id, str(id)), slot["quantity"]]
+			slot_labels[index].text = "%s\n× %d" % [_slot_name(id), slot["quantity"]]
 			slot_labels[index].modulate = Color.WHITE
 	summary.text = "%d / 27 格" % occupied
 	var bar := storage.hotbar.get_slots()
 	for index in range(9):
 		var slot := bar[index]
-		hotbar_labels[index].text = "—" if slot.is_empty() else "%s\n× %d" % [item_names.get(slot.item_id, str(slot.item_id)), slot.quantity]
+		hotbar_labels[index].text = "—" if slot.is_empty() else "%s\n× %d" % [_slot_name(slot.item_id), slot.quantity]
 		var style := StyleBoxFlat.new()
 		style.bg_color = Color("344b5b") if index == storage.selected else Color("1b2832")
 		style.set_border_width_all(2 if index == storage.selected else 0)
@@ -131,6 +131,10 @@ func refresh() -> void:
 			else:
 				hotbar_labels[held_index].modulate.a = 0.25
 	_refresh_crafting()
+
+func _slot_name(id: StringName) -> String:
+	# Development labels need not enlarge the compact item cells.
+	return str(item_names.get(id, str(id))).trim_suffix("（開發用）")
 
 func show_crafting(value: bool) -> void:
 	grid.visible = not value
@@ -180,6 +184,11 @@ func _click_slot(is_hotbar: bool, index: int) -> void:
 	refresh()
 
 func _input(event: InputEvent) -> void:
+	if is_open and event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
+		if not event.echo:
+			set_open(false)
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventMouseButton and event.pressed and (is_open or Input.mouse_mode == Input.MOUSE_MODE_CAPTURED):
 		if event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN]:
 			storage.cycle(-1 if event.button_index == MOUSE_BUTTON_WHEEL_UP else 1)

@@ -51,6 +51,24 @@ func _run() -> void:
 	check(panel.is_open, "忽略按鍵重複")
 	panel._input(key.duplicate())
 	check(not panel.is_open and scene.player.controls_enabled and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED, "E 關閉恢復控制")
+	panel.set_open(true)
+	panel._click_slot(false, 0)
+	var before: Dictionary = scene.storage.snapshot()
+	var escape := InputEventKey.new()
+	escape.keycode = KEY_ESCAPE
+	escape.physical_keycode = KEY_ESCAPE
+	escape.pressed = true
+	Input.parse_input_event(escape)
+	Input.flush_buffered_events()
+	check(not panel.is_open and panel.held_inventory == null, "Esc 關閉並取消拿取")
+	check(scene.storage.snapshot() == before, "Esc 取消不遺失物品")
+	check(scene.player.controls_enabled and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED, "Esc 關閉不再被角色處理為釋放游標")
+	Input.parse_input_event(escape.duplicate())
+	Input.flush_buffered_events()
+	check(Input.mouse_mode == Input.MOUSE_MODE_VISIBLE, "背包已關閉時 Esc 仍釋放游標")
+	for label in panel.slot_labels:
+		var cell_size: Vector2 = label.get_parent().size
+		check(is_equal_approx(cell_size.x, cell_size.y), "背包格子為正方形")
 	scene.queue_free()
 	await process_frame
 	print("PASS: inventory UI toggle, input isolation, live data, layout capture" if failures == 0 else "FAIL: %d" % failures)

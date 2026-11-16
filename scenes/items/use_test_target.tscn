@@ -21,5 +21,5 @@ mesh = SubResource("Mesh")
 position = Vector3(0, 0.9, 0)
 billboard = 1
 text = "測試方塊｜選取測試工具後左鍵"
-font_size = 32
+font_size = 48
 pixel_size = 0.004

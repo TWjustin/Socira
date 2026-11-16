@@ -20,6 +20,6 @@ mesh = SubResource("Mesh")
 [node name="Label" type="Label3D" parent="."]
 position = Vector3(0, 1.2, 0)
 billboard = 1
-font_size = 40
+font_size = 60
 pixel_size = 0.004
 text = "測試礦石 0／5｜測試鎬左鍵"

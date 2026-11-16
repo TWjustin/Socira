@@ -32,6 +32,12 @@ func run_check() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	scene.travel()
 	check(scene.on_island, "進入地形試作島")
+	# Keep the original smooth-island comparison test independent of the active prototype.
+	if scene.island.has_node("BlockTerrain"):
+		var blocks = scene.island.get_node("BlockTerrain")
+		scene.island.remove_child(blocks)
+		blocks.queue_free()
+		scene.island.add_child(load("res://scenes/island_terrain.tscn").instantiate())
 	var terrain = scene.island.get_node("IslandTerrain")
 	await settle()
 	var space: PhysicsDirectSpaceState3D = scene.get_world_3d().direct_space_state

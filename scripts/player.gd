@@ -2,6 +2,9 @@ extends CharacterBody3D
 
 const SPEED := 6.0
 const LIMIT := 31.6
+const GRAVITY := 20.0
+const JUMP_SPEED := sqrt(2.0 * GRAVITY * 0.8)
+var jump_requested := false
 var yaw := 0.0
 var pitch := -0.45
 var distance := 7.0
@@ -20,6 +23,9 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if not controls_enabled:
 		return
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_SPACE and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		jump_requested = true
+		get_viewport().set_input_as_handled()
 	if event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE:
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -44,10 +50,13 @@ func _physics_process(delta: float) -> void:
 	var direction := Basis(Vector3.UP, yaw) * Vector3(input.x, 0.0, input.y)
 	velocity.x = direction.x * SPEED
 	velocity.z = direction.z * SPEED
-	if not is_on_floor():
-		velocity.y -= 20.0 * delta
+	if is_on_floor() and jump_requested and controls_enabled and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		velocity.y = JUMP_SPEED
+	elif not is_on_floor():
+		velocity.y -= GRAVITY * delta
 	else:
 		velocity.y = 0.0
+	jump_requested = false
 	move_and_slide()
 	position.x = clampf(position.x, -LIMIT, LIMIT)
 	position.z = clampf(position.z, -LIMIT, LIMIT)

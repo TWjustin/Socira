@@ -11,7 +11,7 @@ var status: Label
 var load_failed := false
 var pickup_templates: Dictionary = {}
 const GATE_SCENE = preload("res://scenes/travel_gate.tscn")
-const ISLAND_TERRAIN_SCENE = preload("res://scenes/island_terrain.tscn")
+const ISLAND_TERRAIN_SCENE = preload("res://scenes/block_terrain.tscn")
 const ORE_SCENE = preload("res://scenes/items/test_ore.tscn")
 const RETURN_POSITION := Vector3(8, 0, -3)
 var on_island := false
@@ -66,6 +66,7 @@ func _build_lighting() -> void:
 func _on_inventory_open_changed(is_open: bool) -> void:
 	player.controls_enabled = not is_open
 	if is_open:
+		player.jump_requested = false
 		player.velocity.x = 0.0
 		player.velocity.z = 0.0
 
@@ -74,7 +75,7 @@ func _build_interface() -> void:
 	add_child(layer)
 	var help := Label.new()
 	help.position = Vector2(20, 16)
-	help.text = "Socira  |  64 × 64 m\nWASD 移動 · 滑鼠轉向 · E 背包\n左鍵使用 · 漂浮物碰觸拾取 · 右鍵互動／地上物\n測試鎬在 (3, -2) · 出入口在 (8, -5)"
+	help.text = "Socira  |  64 × 64 m\nWASD 移動 · Space 跳躍 · E 背包\n左鍵使用 · 漂浮物碰觸拾取 · 右鍵互動／地上物\n測試鎬在 (3, -2) · 出入口在 (8, -5)"
 	help.add_theme_color_override("font_shadow_color", Color.BLACK)
 	help.add_theme_constant_override("shadow_offset_x", 1)
 	help.add_theme_constant_override("shadow_offset_y", 1)
@@ -221,11 +222,12 @@ func travel() -> void:
 		on_island = true
 		player.floor_snap_length = 0.6
 		_arrive()
-		status.text = "海岸試作 · 淺水可走，深水阻擋 · 外島不自動存檔"
+		status.text = "方塊地形試作 · 斜坡可走，直角高差需跳 · 淺水可走"
 
 func _arrive() -> void:
 	player.position = RETURN_POSITION
 	player.velocity = Vector3.ZERO
+	player.jump_requested = false
 	player.yaw = 0.0
 	player.pitch = -0.15
 	player.update_camera()

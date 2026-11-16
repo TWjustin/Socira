@@ -1,0 +1,25 @@
+[gd_scene load_steps=5 format=3]
+[ext_resource type="Script" path="res://scripts/items/test_ore.gd" id="1"]
+[sub_resource type="SphereShape3D" id="Shape"]
+radius = 0.8
+[sub_resource type="StandardMaterial3D" id="Material"]
+albedo_color = Color(0.42, 0.46, 0.52, 1)
+[sub_resource type="SphereMesh" id="Mesh"]
+radius = 0.8
+height = 1.6
+radial_segments = 8
+rings = 4
+material = SubResource("Material")
+
+[node name="TestOre" type="StaticBody3D"]
+script = ExtResource("1")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("Shape")
+[node name="Visual" type="MeshInstance3D" parent="."]
+mesh = SubResource("Mesh")
+[node name="Label" type="Label3D" parent="."]
+position = Vector3(0, 1.2, 0)
+billboard = 1
+font_size = 40
+pixel_size = 0.004
+text = "測試礦石 0／5｜測試鎬左鍵"

@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/land.gd" id="1_land"]
+
+[sub_resource type="BoxShape3D" id="Shape_land"]
+size = Vector3(64, 1, 64)
+
+[sub_resource type="BoxMesh" id="Mesh_land"]
+size = Vector3(64, 1, 64)
+
+[sub_resource type="StandardMaterial3D" id="Material_land"]
+albedo_color = Color(0.4509804, 0.5921569, 0.40784314, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="Material_grid"]
+shading_mode = 0
+albedo_color = Color(0.3372549, 0.4627451, 0.30588236, 1)
+
+[node name="Land" type="StaticBody3D"]
+script = ExtResource("1_land")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, -0.5, 0)
+shape = SubResource("Shape_land")
+
+[node name="Surface" type="MeshInstance3D" parent="."]
+position = Vector3(0, -0.5, 0)
+mesh = SubResource("Mesh_land")
+material_override = SubResource("Material_land")
+
+[node name="Grid" type="MeshInstance3D" parent="."]
+material_override = SubResource("Material_grid")

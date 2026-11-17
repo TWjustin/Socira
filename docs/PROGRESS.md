@@ -1,5 +1,11 @@
 # Socira：實際開發進度
 
+## 2026-11-18 方塊與跳躍高度試驗
+
+- 使用者回饋喜歡 1 m 方塊，但 1.6 m 跳躍太高；保留方塊高度，將跳躍理論高度試調為 1.2 m。Godot 4.6 D3D12 `tests/block_terrain.gd` 通過，包含實際跳上 1 m 平台；新手感尚待人工試玩。
+- 從 feature/block-terrain-prototype 建立 codex/double-block-jump-height，方塊高度及地形垂直比例加倍為 1 m，跳躍理論高度由 0.8 m 改為 1.6 m；這是待試玩的比較版本，尚未決定採用。
+- 同步調整 `tests/block_terrain.gd` 的高度預期；Godot 4.6 D3D12 測試通過 1 m 階層與碰撞、斜坡、跳躍及淺水往返等檢查。實際手動試玩與手感尚未驗證，需觀察 45 度斜坡和淺水深度。
+
 ## 目前摘要（2026-11-17）
 
 - 目前分支 feature/block-terrain-prototype，程式基準 46f2386；平滑比較分支 feature/island-coast-prototype 保留。main 為 f9a3cc0，本機 origin/main 記錄為 7986e77；地形未合併／推送，本次未查詢遠端即時狀態。

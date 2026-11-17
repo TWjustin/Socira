@@ -1,7 +1,7 @@
 @tool
 extends "res://scripts/island_terrain.gd"
 
-const BLOCK_HEIGHT := 0.5
+const BLOCK_HEIGHT := 1.0
 var cells: Dictionary = {}
 
 static func base_height(cell: Vector2i) -> float:
@@ -9,12 +9,12 @@ static func base_height(cell: Vector2i) -> float:
 	var z := float(cell.y) + 0.5
 	var coast := shore_distance(x, z)
 	if coast >= SHALLOW_WIDTH:
-		return -1.0
+		return -2.0
 	if coast >= 0.0:
-		return -0.5
-	var hills := _hill(x, z, Vector2(-10, -9), 7.0, 1.8)
-	hills += _hill(x, z, Vector2(10, 10), 6.0, 1.4)
-	hills += _hill(x, z, Vector2(-8, 12), 5.0, 0.9)
+		return -1.0
+	var hills := _hill(x, z, Vector2(-10, -9), 7.0, 3.6)
+	hills += _hill(x, z, Vector2(10, 10), 6.0, 2.8)
+	hills += _hill(x, z, Vector2(-8, 12), 5.0, 1.8)
 	return roundf(hills / BLOCK_HEIGHT) * BLOCK_HEIGHT
 
 func _build_ground() -> void:
@@ -51,8 +51,8 @@ func _build_ground() -> void:
 			var neighbor := cell + Vector2i(side[2])
 			var bottom_a := a
 			var bottom_b := b
-			bottom_a.y = -2.0
-			bottom_b.y = -2.0
+			bottom_a.y = -3.0
+			bottom_b.y = -3.0
 			if cells.has(neighbor):
 				var next := _top(neighbor)
 				bottom_a.y = minf(a.y, next[side[3]].y)
@@ -92,7 +92,7 @@ func _top(cell: Vector2i) -> PackedVector3Array:
 func surface_height(x: float, z: float) -> float:
 	var cell := Vector2i(floori(x), floori(z))
 	if not cells.has(cell):
-		return -2.0
+		return -3.0
 	var points := _top(cell)
 	return points[0].y + (points[1].y - points[0].y) * (x - cell.x) + (points[2].y - points[0].y) * (z - cell.y)
 

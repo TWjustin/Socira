@@ -3,7 +3,7 @@ extends CharacterBody3D
 const SPEED := 6.0
 const LIMIT := 31.6
 const GRAVITY := 20.0
-const JUMP_SPEED := sqrt(2.0 * GRAVITY * 0.8)
+const JUMP_SPEED := sqrt(2.0 * GRAVITY * 1.2)
 var jump_requested := false
 var yaw := 0.0
 var pitch := -0.45
